@@ -22,11 +22,32 @@ export async function getProducts(
     });
   }
 }
+
 export async function createProductController(
   req: Request,
   res: Response
 ): Promise<void> {
   try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader?.startsWith("Bearer ")) {
+      res.status(401).json({
+        success: false,
+        message: "Missing Bearer access token"
+      });
+      return;
+    }
+
+    const accessToken = authHeader.substring(7);
+
+    if (!accessToken || accessToken.split(".").length !== 3) {
+      res.status(401).json({
+        success: false,
+        message: "Invalid access token format"
+      });
+      return;
+    }
+
     const { name, price } = req.body;
 
     if (
@@ -38,12 +59,17 @@ export async function createProductController(
     ) {
       res.status(400).json({
         success: false,
-        message: "Name must be a non-empty string and price must be a non-negative number"
+        message:
+          "Name must be a non-empty string and price must be a non-negative number"
       });
       return;
     }
 
-    const product = await createProductService(name.trim(), price);
+    const product = await createProductService(
+      name.trim(),
+      price,
+      accessToken
+    );
 
     res.status(201).json({
       success: true,

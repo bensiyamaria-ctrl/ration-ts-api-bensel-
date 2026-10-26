@@ -9,9 +9,10 @@ export async function getAllProducts(): Promise<Product[]> {
 }
 export async function createProductService(
   name: string,
-  price: number
+  price: number,
+  accessToken: string
 ): Promise<Product> {
-  const product = await createProduct(name, price);
+  const product = await createProduct(name, price,accessToken);
 
   return new Product(product);
 }

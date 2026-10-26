@@ -12,7 +12,7 @@ if (!supabaseUrl || !supabaseKey) {
   );
 }
 
-export const supabase = createClient<Database>(
+export const db = createClient<Database>(
   supabaseUrl,
   supabaseKey
 );
