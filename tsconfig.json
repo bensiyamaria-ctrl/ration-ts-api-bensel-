@@ -1,0 +1,17 @@
+
+{
+  "compilerOptions": {
+    "target": "ES2022",//target	The JavaScript version TypeScript will produce
+    "module": "NodeNext",//Uses Node.js module rules
+    "moduleResolution": "NodeNext",
+    "rootDir": "src",//Our TypeScript source files are inside src
+    "outDir": "dist",//Compiled JavaScript will go into dist
+    "strict": true,//Enables stricter type checking to catch mistakes
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]//Includes Node.js types for type checking
+  },
+  "include": ["src/**/*.ts"],//Checks TypeScript files inside src
+  "exclude": ["node_modules", "dist"]
+}
