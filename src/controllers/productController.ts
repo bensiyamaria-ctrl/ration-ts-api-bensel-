@@ -1,7 +1,12 @@
 
 import type { Request, Response } from "express";
-import { getAllProducts,createProductService } from "../services/productService.js";
+import {
+  getAllProducts,
+  createProductService
+} from "../services/productService.js";
+import { db } from "../config/db.js";
 
+// GET: Fetch all products
 export async function getProducts(
   req: Request,
   res: Response
@@ -23,6 +28,7 @@ export async function getProducts(
   }
 }
 
+// POST: Create a product for an authenticated staff user
 export async function createProductController(
   req: Request,
   res: Response
@@ -44,6 +50,27 @@ export async function createProductController(
       res.status(401).json({
         success: false,
         message: "Invalid access token format"
+      });
+      return;
+    }
+
+    // Validate the token with Supabase Auth
+    const { data: userData, error: userError } =
+      await db.auth.getUser(accessToken);
+
+    console.log(
+      "Supabase user validated:",
+      !userError && !!userData.user
+    );
+    console.log(
+      "Supabase auth error:",
+      userError?.message ?? "none"
+    );
+
+    if (userError || !userData.user) {
+      res.status(401).json({
+        success: false,
+        message: "Invalid or expired access token"
       });
       return;
     }

@@ -24,16 +24,20 @@ export type Database = {
     Views: {
       [key: string]: never;
     };
-    Functions: {
-      get_all_products: {
-        Args: Record<string, never>;
+   Functions: {
+    get_all_products: {
+        Args: Record<PropertyKey, never>;
         Returns: {
-          id: number;
-          name: string;
-          price: number;
+            id: number;
+            name: string;
+            price: number;
         }[];
-      };
     };
+    is_current_user_staff: {
+        Args: Record<PropertyKey, never>;
+        Returns: boolean;
+    };
+};
     Enums: {
       [key: string]: never;
     };
