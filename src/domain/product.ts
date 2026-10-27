@@ -19,3 +19,12 @@ export class Product
     this.price = product.price;
   }
 }
+//stock.ts
+
+
+//create structure of the data
+//create class
+//constructor
+
+//
+//

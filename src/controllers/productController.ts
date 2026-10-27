@@ -114,13 +114,21 @@ export async function createProductController(req: Request,res: Response): Promi
   }
 }
 
-export async function updateProductController(req: Request,res: Response): Promise<void> 
+export async function updateStockController(req: Request,res: Response): Promise<void> 
 {
-   
-  //IF authHeader doesn't have access token in bearer:
-      //return Missing bearer access token message, status code and boolean 
-
-
-  //else
-      //return data,status code and boolean
+   //IF accessToken is not available and starts with bearer:
+      //return 401
+   //IF staff not have the permission to update
+      //return 403
+   //check stock array exists
+      //IF not exists
+        //return 204
+   //check each product in the array
+   //IF the product id is invalid
+      //return 400
+   //IF stock value is negative
+     //return 400
+   //call updateStockService()
+    //return (200),data
+    
 }

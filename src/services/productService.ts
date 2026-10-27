@@ -14,15 +14,12 @@ export async function createProductService(name: string,price: number,accessToke
 
   return new Product(product);
 }
-/*
-export async function updateProductService(
-  id: number,
-  name: string,
-  price: number,
-  quantity: number,
-  accessToken: string
-): Promise<Product> {
-  const upProduct = await updateProduct(id,name,price,quantity,accessToken);
 
-  return new Product(upProduct);
-}*/
+//function updateStockService(array)
+    
+    //create array to store all stocks
+    //for loop
+    //traverse each id
+    //new stock = current stock + received stock
+    //call updateStockRepository(id,qty)
+    //return "updated" or "failure"

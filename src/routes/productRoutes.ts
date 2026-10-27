@@ -6,5 +6,6 @@ const router = Router();
 
 router.get("/", getProducts);
 router.post("/", createProductController);
-
+//patch("/",updateStockController)
+//put("/",updateStockController)
 export default router;

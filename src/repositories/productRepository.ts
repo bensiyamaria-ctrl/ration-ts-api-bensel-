@@ -42,9 +42,17 @@ export async function createProduct(name: string,price: number,accessToken: stri
     return data;
 }
 
-/* 
-Begin 
+
+//create UpdateStock fuction(parameter)
+ //connect with the database
+ //if updated
+  //return updated successfully
+//else
+  //return error
+ 
 
 
-*/
+ 
+
+
 
