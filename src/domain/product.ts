@@ -1,5 +1,5 @@
 
-export type ProductType = {
+export type ProductStructure = {
   id: number;
   name: string;
   price: number;
@@ -10,7 +10,7 @@ export class Product {
   name: string;
   price: number;
 
-  constructor(product: ProductType) {
+  constructor(product: ProductStructure) {
     this.id = product.id;
     this.name = product.name;
     this.price = product.price;

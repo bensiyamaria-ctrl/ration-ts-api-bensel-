@@ -2,7 +2,8 @@
 import type { Request, Response } from "express";
 import {
   getAllProducts,
-  createProductService
+  createProductService,
+  //updateProductService
 } from "../services/productService.js";
 import { db } from "../config/db.js";
 
@@ -110,4 +111,17 @@ export async function createProductController(
       message: "Unable to create product"
     });
   }
+}
+
+export async function updateProductController(
+  req: Request,
+  res: Response
+): Promise<void> {
+   
+  //IF authHeader doesn't have access token in bearer:
+      //return Missing bearer access token message, status code and boolean 
+
+
+  //else
+      //return data,status code and boolean
 }

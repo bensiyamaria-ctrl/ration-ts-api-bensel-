@@ -13,6 +13,6 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 export const db = createClient<Database>(
-  supabaseUrl,
+  supabaseUrl, 
   supabaseKey
 );

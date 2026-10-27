@@ -1,10 +1,10 @@
 
 import { db } from "../config/db.js";
 import { createUserDb } from "../config/userDb.js";
-import type { ProductType } from "../domain/product.js";
+import type { ProductStructure } from "../domain/product.js";
 
 // GET: Fetch all products
-export async function findAllProducts(): Promise<ProductType[]> {
+export async function findAllProducts(): Promise<ProductStructure[]> {
     const { data, error } = await db.rpc("get_all_products");
 
     if (error) {
@@ -20,7 +20,7 @@ export async function createProduct(
     name: string,
     price: number,
     accessToken: string
-): Promise<ProductType> {
+): Promise<ProductStructure> {
     const userDb = createUserDb(accessToken);
 
     const { data: isStaff, error: staffError } =
@@ -42,3 +42,10 @@ console.log("Staff check error:", staffError?.message ?? "none");
 
     return data;
 }
+
+/* 
+Begin 
+
+
+*/
+
