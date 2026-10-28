@@ -1,5 +1,7 @@
 
 import type { Request, Response } from "express";
+import { db } from "../config/db.js";
+
 import {
   fetchAllStock,
   fetchStockByProduct,
@@ -9,49 +11,111 @@ import {
   updateStockQuantity,
 } from "../services/stockService.js";
 
-// Get all stock records
+// Validate the Supabase access token from the request
+async function getAccessToken(
+  req: Request,
+  res: Response
+): Promise<string | null> {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader?.startsWith("Bearer ")) {
+    res.status(401).json({
+      success: false,
+      message: "Missing Bearer access token",
+    });
+    return null;
+  }
+
+  const accessToken = authHeader.substring(7).trim();
+
+  if (!accessToken || accessToken.split(".").length !== 3) {
+    res.status(401).json({
+      success: false,
+      message: "Invalid access token format",
+    });
+    return null;
+  }
+
+  const { data, error } = await db.auth.getUser(accessToken);
+
+  if (error || !data.user) {
+    res.status(401).json({
+      success: false,
+      message: "Invalid or expired access token",
+    });
+    return null;
+  }
+
+  return accessToken;
+}
+
+// GET /api/stock
 export async function getAllStockController(
   req: Request,
   res: Response
-) {
+): Promise<void> {
   try {
-    const stock = await fetchAllStock();
-    res.status(200).json(stock);
+    const accessToken = await getAccessToken(req, res);
+    if (!accessToken) return;
+
+    const stock = await fetchAllStock(accessToken);
+
+    res.status(200).json({
+      success: true,
+      data: stock,
+    });
   } catch (error) {
+    console.error("Failed to fetch stock:", error);
     res.status(500).json({
+      success: false,
       message: error instanceof Error ? error.message : "Failed to fetch stock",
     });
   }
 }
 
-// Get stock for one product
+// GET /api/stock/:productId
 export async function getStockByProductController(
   req: Request,
   res: Response
-) {
+): Promise<void> {
   try {
+    const accessToken = await getAccessToken(req, res);
+    if (!accessToken) return;
+
     const productId = Number(req.params.productId);
 
     if (!Number.isInteger(productId) || productId <= 0) {
-      res.status(400).json({ message: "Invalid product ID" });
+      res.status(400).json({
+        success: false,
+        message: "Invalid product ID",
+      });
       return;
     }
 
-    const stock = await fetchStockByProduct(productId);
-    res.status(200).json(stock);
+    const stock = await fetchStockByProduct(productId, accessToken);
+
+    res.status(200).json({
+      success: true,
+      data: stock,
+    });
   } catch (error) {
+    console.error("Failed to fetch stock for product:", error);
     res.status(500).json({
+      success: false,
       message: error instanceof Error ? error.message : "Failed to fetch stock",
     });
   }
 }
 
-// Create initial stock
+// POST /api/stock
 export async function createStockController(
   req: Request,
   res: Response
-) {
+): Promise<void> {
   try {
+    const accessToken = await getAccessToken(req, res);
+    if (!accessToken) return;
+
     const { productId, quantity } = req.body;
 
     if (
@@ -61,26 +125,37 @@ export async function createStockController(
       quantity < 0
     ) {
       res.status(400).json({
-        message: "Valid productId and non-negative integer quantity are required",
+        success: false,
+        message:
+          "Valid productId and non-negative integer quantity are required",
       });
       return;
     }
 
-    const stock = await createStock(productId, quantity);
-    res.status(201).json(stock);
+    const stock = await createStock(productId, quantity, accessToken);
+
+    res.status(201).json({
+      success: true,
+      data: stock,
+    });
   } catch (error) {
+    console.error("Failed to create stock:", error);
     res.status(500).json({
+      success: false,
       message: error instanceof Error ? error.message : "Failed to create stock",
     });
   }
 }
 
-// Receive stock
+// POST /api/stock/receive
 export async function increaseStockController(
   req: Request,
   res: Response
-) {
+): Promise<void> {
   try {
+    const accessToken = await getAccessToken(req, res);
+    if (!accessToken) return;
+
     const { productId, quantity } = req.body;
 
     if (
@@ -90,26 +165,36 @@ export async function increaseStockController(
       quantity <= 0
     ) {
       res.status(400).json({
+        success: false,
         message: "Valid productId and positive integer quantity are required",
       });
       return;
     }
 
-    const stock = await increaseStock(productId, quantity);
-    res.status(200).json(stock);
+    const stock = await increaseStock(productId, quantity, accessToken);
+
+    res.status(200).json({
+      success: true,
+      data: stock,
+    });
   } catch (error) {
+    console.error("Failed to receive stock:", error);
     res.status(500).json({
+      success: false,
       message: error instanceof Error ? error.message : "Failed to receive stock",
     });
   }
 }
 
-// Issue stock
+// POST /api/stock/issue
 export async function decreaseStockController(
   req: Request,
   res: Response
-) {
+): Promise<void> {
   try {
+    const accessToken = await getAccessToken(req, res);
+    if (!accessToken) return;
+
     const { productId, quantity } = req.body;
 
     if (
@@ -119,26 +204,36 @@ export async function decreaseStockController(
       quantity <= 0
     ) {
       res.status(400).json({
+        success: false,
         message: "Valid productId and positive integer quantity are required",
       });
       return;
     }
 
-    const stock = await decreaseStock(productId, quantity);
-    res.status(200).json(stock);
+    const stock = await decreaseStock(productId, quantity, accessToken);
+
+    res.status(200).json({
+      success: true,
+      data: stock,
+    });
   } catch (error) {
+    console.error("Failed to issue stock:", error);
     res.status(500).json({
+      success: false,
       message: error instanceof Error ? error.message : "Failed to issue stock",
     });
   }
 }
 
-// Set exact stock quantity
+// PATCH /api/stock/quantity
 export async function updateStockQuantityController(
   req: Request,
   res: Response
-) {
+): Promise<void> {
   try {
+    const accessToken = await getAccessToken(req, res);
+    if (!accessToken) return;
+
     const { productId, quantity } = req.body;
 
     if (
@@ -148,16 +243,29 @@ export async function updateStockQuantityController(
       quantity < 0
     ) {
       res.status(400).json({
-        message: "Valid productId and non-negative integer quantity are required",
+        success: false,
+        message:
+          "Valid productId and non-negative integer quantity are required",
       });
       return;
     }
 
-    const stock = await updateStockQuantity(productId, quantity);
-    res.status(200).json(stock);
+    const stock = await updateStockQuantity(
+      productId,
+      quantity,
+      accessToken
+    );
+
+    res.status(200).json({
+      success: true,
+      data: stock,
+    });
   } catch (error) {
+    console.error("Failed to update stock quantity:", error);
     res.status(500).json({
-      message: error instanceof Error ? error.message : "Failed to update stock",
+      success: false,
+      message:
+        error instanceof Error ? error.message : "Failed to update stock quantity",
     });
   }
 }
