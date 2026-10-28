@@ -1,0 +1,20 @@
+$kind: http-request
+url: https://djsuttqlybcrtwrnszsc.supabase.co/auth/v1/token?grant_type=refresh_token
+method: POST
+headers:
+  apikey: sb_publishable_9kY8ijJYzgRIOgsaXiHgTw_oX9zt-W_
+  Content-Type: application/json
+queryParams:
+  grant_type: refresh_token
+body:
+  type: json
+  content: "{\r
+
+    \    \"refresh token\": \"aendveoov7w3\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJFUzI1NiIsImtpZCI6ImI1NGIxYmQwLTkzNjAtNDg1MC1hNTA2LTg3MWY0MTJkOWMxYiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2Rqc3V0dHFseWJjcnR3cm5zenNjLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI3MTMxZGYwYy0zODFiLTQwYmYtOGExNS00ZjYxMmUzNmRiOTUiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzkzMTc1MTgyLCJpYXQiOjE3OTMxNzE1ODIsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnsiZW1haWxfdmVyaWZpZWQiOnRydWV9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzkzMTY3NTM4fV0sInNlc3Npb25faWQiOiJmNmNlOTE2ZC1mYWZiLTRiZDItYTVkYS0yMGQxNDRhMTU5ZjkiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.yvMi94Ym6aeWKiegr_JWTc0Q3l39sIiQiXXlbEnNvik9BRhBP1_iyIhugu-PpZ__fqEVl-pMPtyK_dpi0cf9qw
+order: 1000
